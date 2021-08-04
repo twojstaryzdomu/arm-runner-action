@@ -90,6 +90,11 @@ Path to shell to run the commands in. Defaults to /bin/sh.
 If missing, it will be installed. See `shell_package` option as well.
 If defined as basename binary filename, /bin is added before the variable.
 
+#### `exit_on_fail`
+
+Exit immediately if a command exits with a non-zero status. Default is to exit.
+Set to 'no' or 'false' to disable exiting on command failure.
+
 #### `copy_artifact_path`
 
 Source path to copy outside the image. Relative to the working directory,
