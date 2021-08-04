@@ -33,7 +33,7 @@ inputs:
     required: false
     default: '.'
   copy_repository_path:
-    description: 'Where to copy repository path'
+    description: 'Path inside image where to copy repository path before commands are run'
     required: false
     default: ''
   optimize_image:
