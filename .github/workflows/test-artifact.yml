@@ -1,11 +1,11 @@
 name: Test artifact copy
-on: [push, pull_request]
+on: [push, pull_request, workflow_dispatch]
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - uses: pguyot/arm-runner-action@HEAD
+    - uses: twojstaryzdomu/arm-runner-action@HEAD
       with:
         copy_artifact_path: artifact
         commands: |

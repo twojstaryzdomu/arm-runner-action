@@ -1,0 +1,17 @@
+name: Test multiple artifacts
+on: [push, pull_request, workflow_dispatch]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: twojstaryzdomu/arm-runner-action@show-errors
+      with:
+        copy_artifact_path: artifact1;artifact2
+        commands: |
+            touch artifact1
+            touch artifact2
+    - name: Test artifact was copied
+      run: |
+        test -f artifact1
+        test -f artifact2
