@@ -105,7 +105,7 @@ runs:
             :
         ;;
         *)
-            sudo apt-get install -y "${shell_package:-${shell##*/}}"
+            sudo chroot ${{ steps.mount_image.outputs.mount }} apt-get install -y "${shell_package:-${shell##*/}}"
         ;;
         esac
         sudo mkdir -p $(dirname ${{ steps.mount_image.outputs.mount }}${repository_path})
