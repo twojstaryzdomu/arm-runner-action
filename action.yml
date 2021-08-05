@@ -98,17 +98,18 @@ runs:
             :
         ;;
         *)
-            shell=/bin/${shell}
+            shell=$(which --skip-alias --skip-functions "${shell}") || shell=/bin/${shell}
         ;;
         esac
-        case "${{ inputs.shell_package }}" in
-        bash|sh|'')
+        [ -x "${shell}" ] || case "${{ inputs.shell_package }}" in
+        bash|sh)
             :
         ;;
         *)
-            [ -x "${shell}" ] || sudo apt-get install -y "${shell_package:-${shell##*/}}"
+            sudo apt-get install -y "${shell_package:-${shell##*/}}"
         ;;
         esac
+        shell=$(which --skip-alias --skip-functions "${shell}")
         sudo mkdir -p $(dirname ${{ steps.mount_image.outputs.mount }}${repository_path})
         sudo cp -Rp ${{ github.workspace }} ${{ steps.mount_image.outputs.mount }}${repository_path}
         sudo touch ${{ steps.mount_image.outputs.mount }}/tmp/commands.sh
