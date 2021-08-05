@@ -98,7 +98,7 @@ runs:
             :
         ;;
         *)
-            shell=$(which --skip-alias --skip-functions "${shell}") || shell=/bin/${shell}
+            shell=$(which "${shell}") || shell=/bin/${shell}
         ;;
         esac
         [ -x "${shell}" ] || case "${{ inputs.shell_package }}" in
@@ -109,7 +109,7 @@ runs:
             sudo apt-get install -y "${shell_package:-${shell##*/}}"
         ;;
         esac
-        shell=$(which --skip-alias --skip-functions "${shell}")
+        shell=$(which "${shell}")
         sudo mkdir -p $(dirname ${{ steps.mount_image.outputs.mount }}${repository_path})
         sudo cp -Rp ${{ github.workspace }} ${{ steps.mount_image.outputs.mount }}${repository_path}
         sudo touch ${{ steps.mount_image.outputs.mount }}/tmp/commands.sh
