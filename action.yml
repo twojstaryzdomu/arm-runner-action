@@ -111,6 +111,8 @@ runs:
         sudo mkdir -p $(dirname ${{ steps.mount_image.outputs.mount }}${repository_path})
         sudo cp -Rp ${{ github.workspace }} ${{ steps.mount_image.outputs.mount }}${repository_path}
         touch ${{ steps.mount_image.outputs.mount }}/tmp/commands.sh
+        chmod +x ${{ steps.mount_image.outputs.mount }}/tmp/commands.sh
+        echo "#!$(which ${shell##*/})" >> ${{ steps.mount_image.outputs.mount }}/tmp/commands.sh 
         echo "set -${exit_on_fail}x" >> ${{ steps.mount_image.outputs.mount }}/tmp/commands.sh
         echo "cd ${repository_path}" >> ${{ steps.mount_image.outputs.mount }}/tmp/commands.sh
         cat >> ${{ steps.mount_image.outputs.mount }}/tmp/commands.sh <<"ARM_RUNNER_INPUT_COMMANDS_EOF"
@@ -119,9 +121,9 @@ runs:
         [ -n "${{ inputs.debug }}" ] && cat ${{ steps.mount_image.outputs.mount }}/tmp/commands.sh
         if [ "${{ inputs.use_systemd_nspawn }}x" != "x" -a "${{ inputs.use_systemd_nspawn }}x" != "nox" ]; then
             sudo apt-get install -y systemd-container
-            sudo -E systemd-nspawn -D ${{ steps.mount_image.outputs.mount }} env ${shell##*/} /tmp/commands.sh
+            sudo systemd-nspawn -D ${{ steps.mount_image.outputs.mount }} /tmp/commands.sh
         else
-            sudo -E chroot ${{ steps.mount_image.outputs.mount }} env ${shell##*/} /tmp/commands.sh
+            sudo chroot ${{ steps.mount_image.outputs.mount }} /tmp/commands.sh
         fi
       shell: bash
     - name: Copy artifacts within image
