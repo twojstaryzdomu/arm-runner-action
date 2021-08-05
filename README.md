@@ -101,6 +101,9 @@ Export $GITHUB_ENV contents to the image. Default is not to export. This is
 useful if the commands make use of any variables set earlier and those need to
 be shared with the virtual environment. Set to 'yes' or 'true' to enable.
 
+Practically, this setting allows constructs like ${VARIABLE_NAME} instead of
+${{ env.VARIABLE_NAME }} within the command set.
+
 #### `copy_artifact_path`
 
 Source paths(s) inside the image to copy outside after the commands have
