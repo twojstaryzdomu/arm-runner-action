@@ -95,13 +95,12 @@ runs:
         shell=${{ inputs.shell }}
         case "${shell}" in
         /*)
-            :
+            [ -x "${shell}" ]
         ;;
         *)
-            shell=$(which "${shell}") || shell=/bin/${shell}
+            shell=$(PATH=${PATH}:/bin which "${shell}")
         ;;
-        esac
-        [ -x "${shell}" ] || case "${{ inputs.shell_package }}" in
+        esac || case "${{ inputs.shell_package }}" in
         bash|sh)
             :
         ;;
@@ -109,7 +108,7 @@ runs:
             sudo apt-get install -y "${shell_package:-${shell##*/}}"
         ;;
         esac
-        shell=$(which "${shell}")
+        shell=$(PATH=${PATH}:/bin which "${shell}")
         sudo mkdir -p $(dirname ${{ steps.mount_image.outputs.mount }}${repository_path})
         sudo cp -Rp ${{ github.workspace }} ${{ steps.mount_image.outputs.mount }}${repository_path}
         sudo touch ${{ steps.mount_image.outputs.mount }}/tmp/commands.sh
