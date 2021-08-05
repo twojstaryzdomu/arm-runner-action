@@ -1,0 +1,21 @@
+name: Test debug
+on: [push, pull_request, workflow_dispatch]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: twojstaryzdomu/arm-runner-action@HEAD
+      with:
+        commands: |
+          set -o | grep 'xtrace\s+on'
+    - uses: twojstaryzdomu/arm-runner-action@HEAD
+      with:
+        debug: false
+        commands: |
+          set -o | grep 'xtrace\s+off'
+    - uses: twojstaryzdomu/arm-runner-action@HEAD
+      with:
+        debug: true
+        commands: |
+          set -o | grep 'xtrace\s+on'
