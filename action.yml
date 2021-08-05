@@ -97,20 +97,14 @@ runs:
         ;;
         esac
         shell=${{ inputs.shell }}
-        case "${shell}" in
-        /*)
-            [ -x "${shell}" ]
-        ;;
-        *)
-            PATH=${PATH}:/bin which "${shell}"
-        ;;
-        esac || case "${{ inputs.shell_package }}" in
+        [ -x "${shell}" ] || \
+        PATH=${PATH}:/bin which "${shell}" || \
+        case "${{ inputs.shell_package }}" in
         bash|sh)
             :
         ;;
         *)
             sudo apt-get install -y "${shell_package:-${shell##*/}}"
-            shell=$(PATH=${PATH}:/bin which "${shell}")
         ;;
         esac
         sudo mkdir -p $(dirname ${{ steps.mount_image.outputs.mount }}${repository_path})
@@ -124,9 +118,9 @@ runs:
         [ -n "${{ inputs.debug }}" ] && cat ${{ steps.mount_image.outputs.mount }}/tmp/commands.sh
         if [ "${{ inputs.use_systemd_nspawn }}x" != "x" -a "${{ inputs.use_systemd_nspawn }}x" != "nox" ]; then
             sudo apt-get install -y systemd-container
-            sudo systemd-nspawn -D ${{ steps.mount_image.outputs.mount }} ${shell:-/usr/bin/env ${shell}} /tmp/commands.sh
+            sudo systemd-nspawn -D ${{ steps.mount_image.outputs.mount }} /usr/bin/env ${shell##*/} /tmp/commands.sh
         else
-            sudo chroot ${{ steps.mount_image.outputs.mount }} ${shell:-/usr/bin/env ${shell}} /tmp/commands.sh
+            sudo chroot ${{ steps.mount_image.outputs.mount }} /usr/bin/env ${shell##*/} /tmp/commands.sh
         fi
       shell: bash
     - name: Copy artifacts within image
