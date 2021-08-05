@@ -83,7 +83,7 @@ runs:
     - name: Run commands
       run: |
         set -x
-        PATH=${PATH}:/bin:/usr/bin
+        export PATH=${PATH}:/bin:/usr/bin
         repository_path=${{ inputs.copy_repository_path }}
         if [ "${repository_path}x" = "x" ]; then
             repository_name=`basename ${{ github.workspace }}`
