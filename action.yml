@@ -119,7 +119,7 @@ runs:
         echo "#!/bin/${shell##*/}" >> ${{ steps.mount_image.outputs.mount }}/tmp/commands.sh
         echo "set -${exit_on_fail}x" >> ${{ steps.mount_image.outputs.mount }}/tmp/commands.sh
         case "${{ inputs.export_github_env }}" in
-        yes)
+        yes|true)
           set | grep '=' | sed -E "s|([a-z]+=)'(.*?)'|\1\2|g" >> ${{ steps.mount_image.outputs.mount }}/tmp/commands.sh
         ;;
         esac
