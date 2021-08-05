@@ -130,9 +130,9 @@ For example, to use `ksh93` as shell, set `shell` to `ksh93` and
 #### `exit_on_fail`
 
 Exit immediately if a command exits with a non-zero status. Default is to exit.
-Set to 'no' or 'false' to disable exiting on command failure.
+Set to `no` or `false` to disable exiting on command failure.
 
-#### 'debug'
+#### `debug`
 
 Display executed commands as they are executed. Enabled by default.
 
