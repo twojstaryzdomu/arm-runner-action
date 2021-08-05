@@ -83,6 +83,7 @@ runs:
     - name: Run commands
       run: |
         set -x
+        PATH=${PATH}:/bin:/usr/bin
         repository_path=${{ inputs.copy_repository_path }}
         if [ "${repository_path}x" = "x" ]; then
             repository_name=`basename ${{ github.workspace }}`
@@ -98,7 +99,7 @@ runs:
         esac
         shell=${{ inputs.shell }}
         [ -x "${shell}" ] || \
-        PATH=${PATH}:/bin which "${shell}" || \
+        which "${shell}" || \
         case "${{ inputs.shell_package }}" in
         bash|sh)
             :
@@ -118,9 +119,9 @@ runs:
         [ -n "${{ inputs.debug }}" ] && cat ${{ steps.mount_image.outputs.mount }}/tmp/commands.sh
         if [ "${{ inputs.use_systemd_nspawn }}x" != "x" -a "${{ inputs.use_systemd_nspawn }}x" != "nox" ]; then
             sudo apt-get install -y systemd-container
-            sudo systemd-nspawn -D ${{ steps.mount_image.outputs.mount }} /usr/bin/env ${shell##*/} /tmp/commands.sh
+            sudo systemd-nspawn -D ${{ steps.mount_image.outputs.mount }} env ${shell##*/} /tmp/commands.sh
         else
-            sudo chroot ${{ steps.mount_image.outputs.mount }} /usr/bin/env ${shell##*/} /tmp/commands.sh
+            sudo chroot ${{ steps.mount_image.outputs.mount }} env ${shell##*/} /tmp/commands.sh
         fi
       shell: bash
     - name: Copy artifacts within image
