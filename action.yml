@@ -14,18 +14,18 @@ inputs:
     required: true
     default: 'arm1176'
   commands:
-    description: 'Commands to run in image, executed with /bin/sh'
+    description: 'Commands to run in the image, executed by the shell'
     required: true
     default: 'uname -a'
   copy_artifact_path:
-    description: 'Path of artifacts to copy, within the image'
+    description: 'Paths of artifacts to copy from inside the image on completion'
     required: false
   copy_artifact_dest:
-    description: 'Where to copy artifacts'
+    description: 'Where to copy artifacts on completion'
     required: false
     default: '.'
   copy_repository_path:
-    description: 'Where to copy repository path'
+    description: 'Where to copy repository path inside image before commands run'
     required: false
     default: ''
   optimize_image:
